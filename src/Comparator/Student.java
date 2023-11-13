@@ -1,6 +1,8 @@
+package Comparator;
+
 import java.util.Objects;
 
-public class Student {
+public class Student implements  Comparable<Student>{
     private int studentId;
     private String studentName;
 
@@ -14,7 +16,7 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "Comparator.Student{" +
                 "studentId=" + studentId +
                 ", studentName='" + studentName + '\'' +
                 '}';
@@ -44,4 +46,21 @@ public class Student {
     public int hashCode() {
         return Objects.hash(studentId, studentName);
     }
+
+    /**
+     * Sortingh based on studentId
+     * @param o the object to be compared.
+     * @return
+     */
+    @Override
+    public int compareTo(Student o) {
+        if(studentId == o.studentId) {
+            return 0;
+        } else if (studentId > o.studentId) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
 }

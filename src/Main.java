@@ -1,14 +1,15 @@
-import marker.Deletable;
-
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+import Comparator.*;
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
+
 
         List<Integer> nums = Arrays.asList(4,8,3,6,9,10);
 
@@ -125,12 +126,87 @@ public class Main {
         Student student1 = new Student(1,"balu");
         Student student2 = new Student(2,"siva");
         Student student3 = new Student(1,"prasad");
+
+        List<Student> studentList = new ArrayList<>();
+        studentList.add(student1);
+        studentList.add(student2);
+        studentList.add(student3);
+        System.out.println("before sort studentList :"+studentList);
+        Collections.sort(studentList);
+        System.out.println("After sort studentList :"+studentList);
+
+        System.out.println( " ---------------- ");
+        System.out.println("before Id Comparator sort studentList :"+studentList);
+        Collections.sort(studentList, new IdComparator());
+        System.out.println("After Id Comparator sort studentList :"+studentList);
+
+
+        System.out.println("before name Comparator sort studentList :"+studentList);
+        Collections.sort(studentList, new StudentNameComparator());
+        System.out.println("After name comparator sort studentList :"+studentList);
+
         Set<Student> studentSet = new HashSet<>();
         studentSet.add(student1);
         studentSet.add(student2);
         studentSet.add(student3);
 
         System.out.println(studentSet);
+
+        //ConcurrentModificationException ..
+        List<String> stringList = new ArrayList<>();
+
+
+        stringList.add("a");
+        stringList.add("b");
+
+        Iterator iterator = stringList.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+            //root cause of concurrentModification exception...
+            //  stringList.add("d");
+        }
+
+        List<String> copyOnWriteArrayList = new CopyOnWriteArrayList<>();
+
+        copyOnWriteArrayList.add("a");
+        copyOnWriteArrayList.add("b");
+
+        Iterator copyOnWirteArrayListIterator = copyOnWriteArrayList.iterator();
+        while (copyOnWirteArrayListIterator.hasNext()) {
+            //not giving concurrentModification exception...
+            copyOnWriteArrayList.add("d");
+            System.out.println(copyOnWirteArrayListIterator.next());
+
+        }
+
+        System.out.println("---------------------");
+
+        Map<Integer, String> hashMap = new HashMap<>();
+
+        hashMap.put(1,"one");
+        hashMap.put(2,"two");
+
+        Iterator hashMapIterator = hashMap.keySet().iterator();
+        while (hashMapIterator.hasNext()) {
+            Integer key = (Integer)hashMapIterator.next();
+            System.out.println(key+":"+hashMap.get(key));
+           //root cause of concurrentModification exception...
+            // hashMap.put(3, "three");
+        }
+
+        System.out.println("---------------------");
+
+        Map<Integer, String> concurrentHashMap = new ConcurrentHashMap<>();
+
+        concurrentHashMap.put(1,"one");
+        concurrentHashMap.put(2,"two");
+
+        for (Integer key : concurrentHashMap.keySet()) {
+            System.out.println(key + ":" + concurrentHashMap.get(key));
+            //resolve the root cause of concurrentModification exception...No clone copy provided so key 3 is also printing..
+            concurrentHashMap.put(3, "three");
+        }
+
 
     }
 
