@@ -156,14 +156,12 @@ public class Main {
 
         //ConcurrentModificationException ..
         List<String> stringList = new ArrayList<>();
-
-
+        
         stringList.add("a");
         stringList.add("b");
 
-        Iterator iterator = stringList.iterator();
-        while (iterator.hasNext()) {
-            System.out.println(iterator.next());
+        for (String string : stringList) {
+            System.out.println(string);
             //root cause of concurrentModification exception...
             //  stringList.add("d");
         }
@@ -173,12 +171,10 @@ public class Main {
         copyOnWriteArrayList.add("a");
         copyOnWriteArrayList.add("b");
 
-        Iterator copyOnWirteArrayListIterator = copyOnWriteArrayList.iterator();
-        while (copyOnWirteArrayListIterator.hasNext()) {
+        for (String s : copyOnWriteArrayList) {
             //not giving concurrentModification exception...
             copyOnWriteArrayList.add("d");
-            System.out.println(copyOnWirteArrayListIterator.next());
-
+            System.out.println(s);
         }
 
         System.out.println("---------------------");
@@ -188,11 +184,9 @@ public class Main {
         hashMap.put(1,"one");
         hashMap.put(2,"two");
 
-        Iterator hashMapIterator = hashMap.keySet().iterator();
-        while (hashMapIterator.hasNext()) {
-            Integer key = (Integer)hashMapIterator.next();
-            System.out.println(key+":"+hashMap.get(key));
-           //root cause of concurrentModification exception...
+        for (Integer key : hashMap.keySet()) {
+            System.out.println("Hashmap: "+key + ":" + hashMap.get(key));
+            //root cause of concurrentModification exception...
             // hashMap.put(3, "three");
         }
 
@@ -204,7 +198,7 @@ public class Main {
         concurrentHashMap.put(2,"two");
 
         for (Integer key : concurrentHashMap.keySet()) {
-            System.out.println(key + ":" + concurrentHashMap.get(key));
+            System.out.println("Concurrent hashmap :"+key + ":" + concurrentHashMap.get(key));
             //resolve the root cause of concurrentModification exception...No clone copy provided so key 3 is also printing..
             concurrentHashMap.put(3, "three");
         }
@@ -217,7 +211,7 @@ public class Main {
         mapObj.put("b","bcd");
         mapObj.put("f","fgh");
 
-        System.out.println("Default sorting by treemap :: "+mapObj);
+        System.out.println("Default sorting by key treemap :: "+mapObj);
 
 
 
