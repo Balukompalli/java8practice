@@ -70,7 +70,8 @@ public class Java8MainDemo {
                 .map(employeeJava81 -> employeeJava81.getName()).collect(Collectors.toList());
 
         Set<String> frequencyOfNamesUsingFrequncy = employeeNamesListObj.stream()
-                .filter(name -> Collections.frequency(employeeNamesListObj, name) > 1).collect(Collectors.toSet());
+                .filter(name -> Collections.frequency(employeeNamesListObj, name) > 1)
+                .collect(Collectors.toSet());
         System.out.println("frequencyOfNamesUsingFrequncy : "+frequencyOfNamesUsingFrequncy);
 
     }
